@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>總翔企業 內部入口網站</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ch-navy: #0D2B4B;
+      --ch-blue: #1A5FA8;
+      --ch-teal: #00A9A5;
+      --ch-teal-dark: #008F8C;
+      --ch-light: #E8F4FD;
+      --ch-gray: #6C7A8D;
+      --ch-dark: #1A2332;
+      --ch-border: #D0DDE9;
+      --font-main: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+      --radius: 12px;
+      --shadow-sm: 0 1px 4px rgba(13, 43, 75, .06);
+      --shadow-md: 0 6px 20px rgba(13, 43, 75, .10);
+      --shadow-lg: 0 14px 40px rgba(13, 43, 75, .16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: var(--font-main);
+      color: #2C3E50;
+      background: #F4F8FC;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px
+    }
+
+    /* ============ 進場動畫 ============ */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .reveal {
+      opacity: 0
+    }
+
+    .reveal.in {
+      animation: fadeUp .6s cubic-bezier(.16, .84, .44, 1) forwards
+    }
+
+    /* ============ 橫幅 ============ */
+    .hero {
+      background: linear-gradient(135deg, var(--ch-navy) 0%, var(--ch-blue) 60%, #1A7BA8 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 44px 0 40px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300A9A5' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero .wrap {
+      position: relative;
+      z-index: 1
+    }
+
+    .hero h1 {
+      color: #fff;
+      font-weight: 900;
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      letter-spacing: .02em
+    }
+
+    .hero .sub {
+      color: rgba(255, 255, 255, .8);
+      font-size: 1rem;
+      margin-top: 4px
+    }
+
+    .hero-bar {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, .96);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      color: var(--ch-gray);
+      font-size: .95rem;
+      transition: box-shadow .3s, transform .3s;
+    }
+
+    .search-box:hover {
+      box-shadow: 0 0 0 3px rgba(0, 169, 165, .35);
+      transform: translateY(-1px)
+    }
+
+    .search-box svg {
+      flex-shrink: 0
+    }
+
+    .copilot-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ch-teal);
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 22px;
+      border-radius: var(--radius);
+      white-space: nowrap;
+      transition: background .3s, transform .3s, box-shadow .3s;
+    }
+
+    .copilot-btn:hover {
+      background: var(--ch-teal-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0, 143, 140, .4)
+    }
+
+    /* ============ 通用區塊 ============ */
+    section {
+      padding: 34px 0;
+      scroll-margin-top: 56px
+    }
+
+    .sec-label {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--ch-gray);
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+      text-transform: uppercase
+    }
+
+    .sec-label.navy {
+      color: var(--ch-navy);
+      font-size: 1rem
+    }
+
+    /* ============ 磁磚格 ============ */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px
+    }
+
+    .tile {
+      background: #fff;
+      border: 1px solid var(--ch-border);
+      border-radius: var(--radius);
+      padding: 22px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform .28s cubic-bezier(.16, .84, .44, 1), box-shadow .28s, border-color .28s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--ch-teal)
+    }
+
+    .tile .ic {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 10px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ch-light);
+      color: var(--ch-blue);
+      transition: background .28s, color .28s, transform .28s;
+    }
+
+    .tile:hover .ic {
+      background: var(--ch-teal);
+      color: #fff;
+      transform: scale(1.08)
+    }
+
+    .tile .tt {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--ch-navy)
+    }
+
+    /* ============ 卡片列 ============ */
+    .card {
+      background: #fff;
+      border: 1px solid var(--ch-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm)
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px
+    }
+
+    /* 連結清單 */
+    .link-list {
+      list-style: none
+    }
+
+    .link-list li {
+      border-bottom: 1px solid #EEF3F8
+    }
+
+    .link-list li:last-child {
+      border-bottom: none
+    }
+
+    .link-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 18px;
+      color: var(--ch-navy);
+      font-size: .95rem;
+      font-weight: 500;
+      transition: background .2s, padding-left .2s, color .2s;
+    }
+
+    .link-list a:hover {
+      background: var(--ch-light);
+      padding-left: 24px;
+      color: var(--ch-blue)
+    }
+
+    .link-list a .ext {
+      margin-left: auto;
+      font-size: .72rem;
+      color: var(--ch-gray);
+      font-weight: 400
+    }
+
+    .card-head {
+      padding: 15px 18px;
+      border-bottom: 1px solid #EEF3F8;
+      font-weight: 700;
+      color: var(--ch-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    /* 公告 */
+    .news-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      border-bottom: 1px solid #EEF3F8;
+      transition: background .2s, padding-left .2s;
+    }
+
+    .news-item:last-child {
+      border-bottom: none
+    }
+
+    .news-item:hover {
+      background: var(--ch-light);
+      padding-left: 24px
+    }
+
+    .news-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ch-teal);
+      flex-shrink: 0
+    }
+
+    .news-item .txt {
+      font-size: .95rem;
+      color: var(--ch-navy);
+      font-weight: 500;
+      flex: 1
+    }
+
+    .news-item .date {
+      font-size: .78rem;
+      color: var(--ch-gray)
+    }
+
+    .badge-new {
+      background: #E63946;
+      color: #fff;
+      font-size: .66rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 20px;
+      margin-left: 6px
+    }
+
+    /* 提醒條 */
+    .notice {
+      background: linear-gradient(90deg, rgba(0, 169, 165, .10), rgba(26, 95, 168, .06));
+      border: 1px solid rgba(0, 169, 165, .3);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .notice .big {
+      font-weight: 900;
+      color: var(--ch-navy);
+      font-size: 1.05rem
+    }
+
+    .notice .tag {
+      background: var(--ch-navy);
+      color: #fff;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: .9rem;
+      letter-spacing: .03em
+    }
+
+    .notice .gst {
+      margin-left: auto;
+      font-size: .86rem;
+      color: var(--ch-gray)
+    }
+
+    .notice .gst b {
+      color: var(--ch-blue);
+      font-size: 1.05rem;
+      letter-spacing: .04em
+    }
+
+    /* 新人清單 */
+    .onboard {
+      background: linear-gradient(135deg, #FFF8EC, #FFF3DD);
+      border: 1px solid #F0DFB8;
+      border-radius: var(--radius);
+      padding: 20px 22px
+    }
+
+    .onboard h3 {
+      color: #9A6B10;
+      font-size: 1rem;
+      margin-bottom: 12px
+    }
+
+    .ob-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 7px 0;
+      color: #8A6414;
+      font-size: .94rem
+    }
+
+    .ob-item input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--ch-teal);
+      cursor: pointer
+    }
+
+    .ob-item a {
+      color: var(--ch-blue);
+      font-weight: 600
+    }
+
+    .ob-item a:hover {
+      text-decoration: underline
+    }
+
+    /* 據點膠囊 */
+    .loc-block {
+      margin-bottom: 14px
+    }
+
+    .loc-block:last-child {
+      margin-bottom: 0
+    }
+
+    .loc-title {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--ch-navy);
+      margin-bottom: 8px
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px
+    }
+
+    .pill {
+      background: #fff;
+      border: 1px solid var(--ch-border);
+      border-radius: 30px;
+      padding: 7px 18px;
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--ch-navy);
+      cursor: pointer;
+      transition: all .25s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pill:hover {
+      background: var(--ch-navy);
+      color: #fff;
+      border-color: var(--ch-navy);
+      transform: translateY(-2px)
+    }
+
+    /* FAQ */
+    .faq-q {
+      padding: 14px 18px;
+      border-bottom: 1px solid #EEF3F8;
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .faq-q:last-child {
+      border-bottom: none
+    }
+
+    .faq-q:hover {
+      background: var(--ch-light)
+    }
+
+    .faq-q .q {
+      font-weight: 600;
+      color: var(--ch-navy);
+      font-size: .94rem;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .faq-q .q::before {
+      content: 'Q';
+      background: var(--ch-teal);
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .faq-q .a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease, margin .35s;
+      color: var(--ch-gray);
+      font-size: .9rem;
+      padding-left: 28px
+    }
+
+    .faq-q.open .a {
+      max-height: 200px;
+      margin-top: 8px
+    }
+
+    .faq-q .q .arw {
+      margin-left: auto;
+      transition: transform .3s;
+      color: var(--ch-gray)
+    }
+
+    .faq-q.open .q .arw {
+      transform: rotate(180deg)
+    }
+
+    /* 頁尾 */
+    footer {
+      background: var(--ch-navy);
+      color: rgba(255, 255, 255, .75);
+      text-align: center;
+      padding: 22px;
+      font-size: .85rem;
+      margin-top: 20px
+    }
+
+    footer span {
+      color: var(--ch-teal)
+    }
+
+    /* 彈跳視窗 */
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 43, 75, .55);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px
+    }
+
+    .modal-mask.show {
+      display: flex;
+      animation: maskIn .25s ease
+    }
+
+    @keyframes maskIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 82vh;
+      overflow: auto;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn .3s cubic-bezier(.16, .84, .44, 1);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(.94) translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0)
+      }
+    }
+
+    .modal-head {
+      background: linear-gradient(135deg, var(--ch-navy), var(--ch-blue));
+      color: #fff;
+      padding: 20px 24px;
+      position: sticky;
+      top: 0
+    }
+
+    .modal-head .mtitle {
+      font-size: 1.15rem;
+      font-weight: 700;
+      max-width: 95%;
+    }
+
+    .modal-head .mdate {
+      font-size: .82rem;
+      color: rgba(255, 255, 255, .7);
+      margin-top: 3px
+    }
+
+    .modal-body {
+      padding: 22px 24px;
+      color: #2C3E50;
+      font-size: .95rem;
+      line-height: 1.9
+    }
+
+    .modal-body ul {
+      margin: 10px 0 10px 20px
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: rgba(255, 255, 255, .2);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, .35)
+    }
+
+    @media(max-width:820px) {
+
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .modal-body a {
+      color: var(--ch-blue);
+      font-weight: 600;
+      line-height: 2;
+    }
+
+    .modal-body a:hover {
+      text-decoration: underline;
+    }
+
+    /* ============ 章節導覽列 ============ */
+    .subnav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #fff;
+      border-bottom: 1px solid var(--ch-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .subnav .wrap {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none
+    }
+
+    .subnav .wrap::-webkit-scrollbar {
+      display: none
+    }
+
+    .subnav a {
+      flex-shrink: 0;
+      padding: 13px 14px;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--ch-gray);
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+
+    .subnav a:hover {
+      color: var(--ch-navy)
+    }
+
+    .subnav a.active {
+      color: var(--ch-teal-dark);
+      border-color: var(--ch-teal)
+    }
+
+    /* ============ 回到頂端 ============ */
+    .back-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ch-navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity .25s, transform .25s, visibility .25s, background .2s;
+      z-index: 60;
+      border: none;
+    }
+
+    .back-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0)
+    }
+
+    .back-top:hover {
+      background: var(--ch-teal-dark)
+    }
+
+    /* ============ 意見回饋 ============ */
+    .feedback-link {
+      color: var(--ch-teal);
+      font-weight: 600
+    }
+
+    .feedback-link:hover {
+      text-decoration: underline
+    }
+
+    /* ============ 新人打卡狀態列 ============ */
+    .ob-status {
+      font-size: .8rem;
+      color: #9A6B10;
+      margin-bottom: 10px;
+      opacity: .8;
+    }
+
+    .ob-status .chg {
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .ob-item.ob-loading {
+      opacity: .45;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== 橫幅 ========== -->
+  <header class="hero">
+    <div class="wrap">
+      <h1>總翔企業 內部入口網站</h1>
+      <div class="sub">找表單、查規定，都從這裡開始</div>
+      <div class="hero-bar">
+        <!--  <div class="search-box" onclick="alert('請改用頁面頂端 SharePoint 內建搜尋，或串接站台搜尋網址')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        搜尋文件、規定、同事
+      </div>
+      <a class="copilot-btn" href="#COPILOT_URL">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
+        問 Copilot
+      </a> -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== 章節導覽列 ========== -->
+  <nav class="subnav">
+    <div class="wrap">
+      <a href="#sec-news">公告</a>
+      <a href="#sec-todo">辦事</a>
+      <a href="#sec-onboard">新人</a>
+      <a href="#sec-dept">部門</a>
+      <a href="#sec-faq">FAQ</a>
+      <a href="#sec-loc">據點</a>
+    </div>
+  </nav>
+
+  <!-- ========== 最新公告 ========== -->
+  <section id="sec-news">
+    <div class="wrap reveal">
+      <div class="sec-label">最新公告</div>
+      <div class="card">
+         <div class="news-item" onclick="openModal(0)"><span class="dot"></span><span
+            class="txt">本公司請款作業規範<span class="badge-new">NEW</span></span><span
+            class="date">06/15</span></div>
+        <div class="news-item" onclick="openModal(1)"><span class="dot"></span><span
+            class="txt">公告修正本公司工作人員工作規則，自即日起實施。</span><span
+            class="date">08/28</span></div>
+        <div class="news-item" onclick="openModal(2)"><span class="dot"></span><span
+            class="txt">請款資料電子化提供作業（含發票電子檔）</span><span
+            class="date">08/14</span></div>
+        <div class="news-item" onclick="openModal(3)"><span class="dot"></span><span
+            class="txt">本公司職場不法侵害(含性騷擾、霸凌)防治、申訴及懲戒辦法</span><span
+            class="date">06/17</span></div>
+        <div class="news-item" onclick="openModal(4)"><span class="dot"></span><span class="txt">請款單月底前送達總公司</span><span
+            class="date">02/01</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 我要辦事 ========== -->
+  <section id="sec-todo" style="padding-top:0">
+    <div class="wrap reveal">
+      <div class="sec-label">我要辦事</div>
+      <div class="tile-grid">
+        <a class="tile" href="https://pro.104.com.tw/psc2" target="_blank">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg></div>
+          <div class="tt">104 企業大師</div>
+        </a>
+        <a class="tile"
+          href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/1_%E5%9C%8B%E5%85%A7%E8%AB%8B%E6%AC%BE%E5%96%AE.xlsx">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6M9 15h6M9 11h2" />
+            </svg></div>
+          <div class="tt">國內請款單</div>
+        </a>
+        <a class="tile"
+          href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/2_%E5%87%BA%E5%8B%A4%E8%A1%A8.xlsx">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4" />
+            </svg></div>
+          <div class="tt">出勤表</div>
+        </a>
+        <a class="tile"
+          href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/3_%E5%85%AC%E5%8B%99%E8%BB%8A%E7%A7%81%E8%BB%8A%E9%87%8C%E7%A8%8B%E7%B4%80%E9%8C%84%E8%A1%A8.xlsx">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M5 17H3v-5l2-5h14l2 5v5h-2M5 17a2 2 0 1 0 4 0M15 17a2 2 0 1 0 4 0M5 17h10" />
+            </svg></div>
+          <div class="tt">公務車私車里程紀錄表</div>
+        </a>
+        <a class="tile"
+          href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/4_%E5%9C%8B%E5%A4%96%E8%AB%8B%E6%AC%BE%E5%96%AE.xlsx">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
+            </svg></div>
+          <div class="tt">國外請款單</div>
+        </a>
+        <a class="tile"
+          href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/5_%E5%9C%8B%E5%A4%96%E5%87%BA%E5%B7%AE%E6%B4%A5%E8%B2%BC%E7%94%B3%E8%AB%8B%E8%A1%A8.xlsx">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path
+                d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg></div>
+          <div class="tt">國外出差津貼申請表</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 請款重要日期 ========== -->
+  <section style="padding-top:0">
+    <div class="wrap reveal">
+      <div class="notice">
+        <span class="tag">請款時程</span>
+        <span class="big">當月底前送達 → 次月 15 號付款</span>
+        <span class="gst">總翔統編：<b>86920553</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 新人上手 ========== -->
+  <section id="sec-onboard" style="padding-top:0">
+    <div class="wrap reveal">
+      <div class="onboard">
+        <h3>🌱 新人上手：報到第一週</h3>
+        <div class="ob-status" id="obStatus"></div>
+        <!-- <div class="ob-item"><input type="checkbox"><span>看 3 分鐘公司簡介影片</span></div> -->
+        <div class="ob-item"><input type="checkbox" data-ob-key="download_form_sop"><span>下載
+            <a href="https://onanatek.sharepoint.com/:f:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE?d=w4d5b3be621d54e3fbc361a1f8fe647f6&csf=1&web=1&e=mwC7Pv"
+              target="_blank">請款表單</a>
+            並讀 <a
+              href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/SOP/%E5%9C%8B%E5%85%A7%E5%A4%96%E5%80%8B%E4%BA%BA%E8%AB%8B%E6%AC%BESOP-2026.03.03%E6%9B%B4.pdf"
+              target="_blank">SOP</a></span></div>
+        <div class="ob-item"><input type="checkbox" data-ob-key="know_dept"><span>認識<a href="https://onanatek.sharepoint.com/:x:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_%E4%BA%BA%E4%BA%8B%E7%AE%A1%E7%90%86%E8%B3%87%E6%96%99%E5%A4%BE/%E7%B8%BD%E7%BF%94-%E7%B5%84%E7%B9%94%E6%9E%B6%E6%A7%8B_20250617(TBD).xlsx?d=w489fa59fa0364c88a2dbdf71c8d0b673&csf=1&web=1&e=ldPHhC"
+              target="_blank">各部門與主管</a></span></div>
+        <div class="ob-item"><input type="checkbox" data-ob-key="setup_104"><span>設定 <a href="https://pro.104.com.tw/psc2" target="_blank">104
+              打卡系統</a></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 各部門 + 知識庫 ========== -->
+  <section id="sec-dept" style="padding-top:0">
+    <div class="wrap reveal">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">🏢 各部門 SharePoint</div>
+          <ul class="link-list">
+            <li><a href="https://onanatek.sharepoint.com/sites/humanresources" target="_blank">人資部</a></li>
+            <li><a href="https://onanatek.sharepoint.com/sites/mgmt" target="_blank">管理部</a></li>
+            <li><a href="https://onanatek.sharepoint.com/sites/Dev" target="_blank">研發部</a></li>
+            <li><a href="https://onanatek.sharepoint.com/sites/Sales" target="_blank">業務部</a></li>
+            <li><a href="https://onanatek.sharepoint.com/sites/msteams_3a2201" target="_blank">技術部</a></li>
+            <li><a href="https://onanatek.sharepoint.com/sites/Prod" target="_blank">製造部</a></li>
+            <li><a href="https://onanatek.sharepoint.com/sites/information" target="_blank">資訊部</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-head">📚 知識庫</div>
+          <ul class="link-list">
+            <li><a
+                href="https://onanatek.sharepoint.com/:f:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE?d=w4d5b3be621d54e3fbc361a1f8fe647f6&csf=1&web=1&e=mwC7Pv"
+                target="_blank">下載請款表單</a></li>
+            <li><a
+                href="https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/SOP/%E5%9C%8B%E5%85%A7%E5%A4%96%E5%80%8B%E4%BA%BA%E8%AB%8B%E6%AC%BESOP-2026.03.03%E6%9B%B4.pdf"
+                target="_blank">個人請款 SOP</a></li>
+            <li><a
+                href="https://onanatek.sharepoint.com/:w:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_%E4%BA%BA%E4%BA%8B%E7%AE%A1%E7%90%86%E8%B3%87%E6%96%99%E5%A4%BE/20250909%20%E5%85%AC%E5%8F%B8%E5%88%B6%E5%BA%A6%E5%8C%AF%E6%95%B4.docx?d=w04fe1babfb0b46f28b2c8623e38df9ae&csf=1&web=1&e=c3eKtU"
+                target="_blank">20250909 公司制度匯整</a></li>
+
+            <li><a
+                href="https://onanatek.sharepoint.com/:f:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_Teams%E7%9B%B8%E9%97%9C%E6%87%89%E7%94%A8%E8%AA%AA%E6%98%8E?d=w6b44826b36784eae86fbe2a766fac3b9&csf=1&web=1&e=u1dm7X"
+                target="_blank">總翔_Teams相關應用說明</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 常見問題 ========== -->
+  <section id="sec-faq" style="padding-top:0">
+    <div class="wrap reveal">
+      <div class="sec-label">常見問題</div>
+      <div class="card">
+        <div class="faq-q" onclick="this.classList.toggle('open')">
+          <div class="q">停車費可以報嗎？<svg class="arw" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6" />
+            </svg></div>
+          <div class="a">限入廠、辦公、與客戶吃飯相關停車。個人吃飯或處理私事不可報。需填時間點、拜訪客戶或工作內容、地點（停車場名稱）。</div>
+        </div>
+        <div class="faq-q" onclick="this.classList.toggle('open')">
+          <div class="q">公司統編是多少？<svg class="arw" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6" />
+            </svg></div>
+          <div class="a">總翔統編 86920553。發票務必打統編且確認無誤，統編錯誤且無法換票時需另提供等值發票才能請款。</div>
+        </div>
+        <div class="faq-q" onclick="this.classList.toggle('open')">
+          <div class="q">請款多久會付款？<svg class="arw" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6" />
+            </svg></div>
+          <div class="a">當月底前送達總公司，次月 15 號付款。郵寄以總公司實際收到日為準；資料或發票不完整會影響付款時間。</div>
+        </div>
+        <div class="faq-q" onclick="this.classList.toggle('open')">
+          <div class="q">安全鞋、生育補助怎麼申請？<svg class="arw" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6" />
+            </svg></div>
+          <div class="a">安全鞋每年上限 2,500 元、一年一次。生育補助每胎 5,000 元、限一次，需附出生證明及滿 5,000 元的嬰兒用品發票。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 據點 + 系統與工具 ========== -->
+  <section id="sec-loc" style="padding-top:0">
+    <div class="wrap reveal">
+      <div class="grid-2">
+        <div>
+          <div class="sec-label">各區據點</div>
+          <div class="loc-block">
+            <div class="loc-title">🇹🇼 台灣據點</div>
+            <div class="pills">
+              <span class="pill" onclick="openLocModal(0)">台北分公司（三重）</span><span class="pill">新竹分公司</span><span
+                class="pill">雲林分公司</span><span class="pill" onclick="openLocModal(1)">台中分公司</span><span class="pill"
+                onclick="openLocModal(2)">高雄總公司</span>
+            </div>
+          </div>
+          <div class="loc-block">
+            <div class="loc-title">🇨🇳 大陸據點</div>
+            <div class="pills">
+              <span class="pill">上海</span><span class="pill">北京</span><span class="pill">成都</span><span
+                class="pill">武漢</span><span class="pill">深圳</span><span class="pill">昆山</span>
+            </div>
+          </div>
+          <div class="loc-block">
+            <div class="loc-title">🇻🇳 越南據點</div>
+            <div class="pills">
+              <span class="pill">（分點名稱）</span>
+            </div>
+          </div>
+          <div class="loc-block">
+            <div class="loc-title">🇺🇸 美國據點</div>
+            <div class="pills">
+              <span class="pill">亞歷桑納州</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">🔧 系統與工具</div>
+          <ul class="link-list">
+            <li><a href="https://pro.104.com.tw/psc2" target="_blank">104 打卡系統<span class="ext">外部 ↗</span></a></li>
+            <li><a href="https://www.anatekent.com/" target="_blank">公司官方網站<span class="ext">外部 ↗</span></a></li>
+            <!-- <li><a href="#IT_URL">IT 報修</a></li>
+          <li><a href="#ORG_URL">組織圖 / 主管聯絡</a></li>-->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    總翔<span>企業</span> 內部入口網站 · 內部使用<br>
+    發現連結壞了或想建議新功能？<a class="feedback-link" href="mailto:sherena.wu@anatekent.com?subject=入口網站問題回報">點此回報</a>
+  </footer>
+
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到頂端">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  </button>
+
+  <!-- ========== 彈跳視窗 ========== -->
+  <div class="modal-mask" id="mask" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-head">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="mtitle" id="mTitle"></div>
+        <div class="mdate" id="mDate"></div>
+      </div>
+      <div class="modal-body" id="mBody"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== 範例公告內容（之後自行修改此陣列即可） ===== */
+    const NEWS = [
+      {
+      title: "本公司請款作業規範",
+      date: "公告日 2026/04/20",
+      body: `<p>為確保公司帳務處理及請款流程之準確與效率，請各位同仁辦理國內外個人請款時，務必遵循請款規定辦理，若有相關疑問請洽管理部。</p>
+      <p>相關檔案：</p>
+      <p><a href="https://onanatek.sharepoint.com/:x:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_SOP/%E5%9C%8B%E5%85%A7%E5%A4%96%E8%AB%8B%E6%AC%BE%E7%9B%B8%E9%97%9C%E8%A1%A8%E6%A0%BC.xlsx?d=w76b08164c116408db9e50baadd39edd0&csf=1&web=1&e=JhPc9L" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M6.116 12.519c-.406 0-.812-.102-1.182-.316a2.39 2.39 0 0 1-1.14-1.575 2.7 2.7 0 0 1 .308-1.943l1.628-2.82a.75.75 0 1 1 1.298.75l-1.626 2.82c-.158.27-.208.58-.145.867.06.263.21.477.427.602.467.267 1.102.05 1.414-.49l2.827-4.897c.378-.656.5-1.402.343-2.104-.15-.678-.546-1.232-1.114-1.56-1.196-.69-2.792-.166-3.559 1.164L4.704 4.56a.75.75 0 0 1-1.299-.75l.891-1.543C5.477.22 7.993-.55 9.904.555c.935.54 1.585 1.439 1.829 2.532a4.43 4.43 0 0 1-.51 3.18l-2.826 4.897c-.5.863-1.389 1.353-2.281 1.355m-.102 3.43c-.922 0-1.843-.23-2.682-.714-1.316-.76-2.233-2.021-2.584-3.554-.344-1.512-.093-3.108.708-4.494l.562-.977a.751.751 0 0 1 1.3.75l-.564.977c-.61 1.058-.804 2.268-.542 3.41.255 1.12.919 2.04 1.87 2.59 1.984 1.143 4.61.313 5.86-1.85l4.195-7.25a.751.751 0 0 1 1.299.751l-4.195 7.25c-1.146 1.983-3.187 3.111-5.227 3.111" clip-rule="evenodd"></path></svg>國內外請款相關表格</a></p>
+      <p><a href="https://onanatek.sharepoint.com/:b:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_SOP/%E5%9C%8B%E5%85%A7%E5%A4%96%E5%80%8B%E4%BA%BA%E8%AB%8B%E6%AC%BESOP-2026.03.03%E6%9B%B4.pdf?d=w2b2b6f62b2d94876a7c0efe9111d11d1&csf=1&web=1&e=Dba3HG" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M6.116 12.519c-.406 0-.812-.102-1.182-.316a2.39 2.39 0 0 1-1.14-1.575 2.7 2.7 0 0 1 .308-1.943l1.628-2.82a.75.75 0 1 1 1.298.75l-1.626 2.82c-.158.27-.208.58-.145.867.06.263.21.477.427.602.467.267 1.102.05 1.414-.49l2.827-4.897c.378-.656.5-1.402.343-2.104-.15-.678-.546-1.232-1.114-1.56-1.196-.69-2.792-.166-3.559 1.164L4.704 4.56a.75.75 0 0 1-1.299-.75l.891-1.543C5.477.22 7.993-.55 9.904.555c.935.54 1.585 1.439 1.829 2.532a4.43 4.43 0 0 1-.51 3.18l-2.826 4.897c-.5.863-1.389 1.353-2.281 1.355m-.102 3.43c-.922 0-1.843-.23-2.682-.714-1.316-.76-2.233-2.021-2.584-3.554-.344-1.512-.093-3.108.708-4.494l.562-.977a.751.751 0 0 1 1.3.75l-.564.977c-.61 1.058-.804 2.268-.542 3.41.255 1.12.919 2.04 1.87 2.59 1.984 1.143 4.61.313 5.86-1.85l4.195-7.25a.751.751 0 0 1 1.299.751l-4.195 7.25c-1.146 1.983-3.187 3.111-5.227 3.111" clip-rule="evenodd"></path></svg>國內外個人請款SOP-2026.03.03更</a></p>`
+    },
+    {
+      title: "公告修正本公司工作人員工作規則，自即日起實施。",
+      date: "公告日 2026/08/20",
+      body: `<p>一、本公司工作規則依勞動基準法第70條規定報請主管機關備查在案。</p>
+<p>二、修正後全文請逕至SharePoint/總翔企業/General/公司規章/人事類/工作規則項下查閱，請全體同仁詳閱並確實遵行。</p>
+      <p>相關檔案：</p>
+      <p><a href="https://onanatek.sharepoint.com/:f:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_%E4%BA%BA%E4%BA%8B%E7%AE%A1%E7%90%86%E8%B3%87%E6%96%99%E5%A4%BE?d=w3a47b967e25048f9904754b48a1b9607&csf=1&web=1&e=Bm75pJ" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M6.116 12.519c-.406 0-.812-.102-1.182-.316a2.39 2.39 0 0 1-1.14-1.575 2.7 2.7 0 0 1 .308-1.943l1.628-2.82a.75.75 0 1 1 1.298.75l-1.626 2.82c-.158.27-.208.58-.145.867.06.263.21.477.427.602.467.267 1.102.05 1.414-.49l2.827-4.897c.378-.656.5-1.402.343-2.104-.15-.678-.546-1.232-1.114-1.56-1.196-.69-2.792-.166-3.559 1.164L4.704 4.56a.75.75 0 0 1-1.299-.75l.891-1.543C5.477.22 7.993-.55 9.904.555c.935.54 1.585 1.439 1.829 2.532a4.43 4.43 0 0 1-.51 3.18l-2.826 4.897c-.5.863-1.389 1.353-2.281 1.355m-.102 3.43c-.922 0-1.843-.23-2.682-.714-1.316-.76-2.233-2.021-2.584-3.554-.344-1.512-.093-3.108.708-4.494l.562-.977a.751.751 0 0 1 1.3.75l-.564.977c-.61 1.058-.804 2.268-.542 3.41.255 1.12.919 2.04 1.87 2.59 1.984 1.143 4.61.313 5.86-1.85l4.195-7.25a.751.751 0 0 1 1.299.751l-4.195 7.25c-1.146 1.983-3.187 3.111-5.227 3.111" clip-rule="evenodd"></path></svg>總翔_人事管理資料夾</a></p>`
+    },
+      {
+      title: "請款資料電子化提供作業（含發票電子檔）",
+      date: "公告日 2026/08/14",
+      body: `<p>為配合總公司推動憑證電子化管理、提升請款作業效率，並作為公司碳排放量統計之依據，自即日起調整請款資料提供方式，請依以下流程辦理：</p>
+        <p><b>一、準備請款單與相關附件的電子檔</b></p>
+        <ul>
+          <li>如請款單已有電子檔，可直接提供。</li>
+          <li>如為手寫請款單，請先掃描成電子檔後再提供。</li>
+        </ul>
+        <p><b>二、提供發票電子檔</b></p>
+        <p>發票可採以下任一方式提供：</p>
+        <ul>
+          <li>拍照提供（一次最多拍 3 張）</li>
+          <li>掃描提供</li>
+        </ul>
+        <p>請確認檔案符合以下原則：</p>
+        <ul>
+          <li>內容清晰完整</li>
+          <li>發票號碼、日期及金額可清楚辨識</li>
+          <li>方便後續核對及歸檔作業</li>
+        </ul>
+        <p><b>三、Email 寄送資料</b></p>
+        <p>請將以下資料一併寄送至會計窗口：</p>
+        <ul>
+          <li>請款單電子檔與所有相關附件</li>
+          <li>發票照片或掃描檔</li>
+        </ul>
+        <p>收件信箱：<a href="mailto:peixuan.lu@anatekent.com">peixuan.lu@anatekent.com</a></p>
+        <p><b>四、繳交紙本文件</b></p>
+        <p>完成 Email 寄送後，請再將紙本請款單及相關憑證寄送至會計單位。</p>
+        <p>敬請各位同仁配合辦理，感謝大家的支持與協助。</p>`
+      },
+      {
+      title: "本公司職場不法侵害(含性騷擾、霸凌)防治、申訴及懲戒辦法",
+      date: "公告日 2026/06/17",
+      body: `<p>修正本公司職場不法侵害(含性騷擾、霸凌)防治、申訴及懲戒辦法，相關規範與表單詳附檔。同仁若遭遇職場不法侵害相關情事，請向公司提出申訴。</p>
+        <p>受理窗口： 人力資源部 </p>
+        <p>申訴專線： （07）2270096</p>
+        <p>專用申訴信箱： racheal.liao@anatekent.com </p>
+        <p>相關檔案：</p>
+        <p><a href="https://onanatek.sharepoint.com/:b:/r/sites/msteams_17237f/Shared%20Documents/General/%E7%B8%BD%E7%BF%94_SOP/%E8%81%B7%E5%A0%B4%E4%B8%8D%E6%B3%95%E4%BE%B5%E5%AE%B3(%E5%90%AB%E6%80%A7%E9%A8%B7%E6%93%BE%E3%80%81%E9%9C%B8%E5%87%8C)%E9%98%B2%E6%B2%BB%E3%80%81%E7%94%B3%E8%A8%B4%E5%8F%8A%E6%87%B2%E6%88%92%E8%BE%A6%E6%B3%9520251203-%E5%85%AC%E5%91%8A%E7%89%88.pdf?d=wc5f514423905427faf67f729ee197b15&csf=1&web=1&e=LVuW3O" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M6.116 12.519c-.406 0-.812-.102-1.182-.316a2.39 2.39 0 0 1-1.14-1.575 2.7 2.7 0 0 1 .308-1.943l1.628-2.82a.75.75 0 1 1 1.298.75l-1.626 2.82c-.158.27-.208.58-.145.867.06.263.21.477.427.602.467.267 1.102.05 1.414-.49l2.827-4.897c.378-.656.5-1.402.343-2.104-.15-.678-.546-1.232-1.114-1.56-1.196-.69-2.792-.166-3.559 1.164L4.704 4.56a.75.75 0 0 1-1.299-.75l.891-1.543C5.477.22 7.993-.55 9.904.555c.935.54 1.585 1.439 1.829 2.532a4.43 4.43 0 0 1-.51 3.18l-2.826 4.897c-.5.863-1.389 1.353-2.281 1.355m-.102 3.43c-.922 0-1.843-.23-2.682-.714-1.316-.76-2.233-2.021-2.584-3.554-.344-1.512-.093-3.108.708-4.494l.562-.977a.751.751 0 0 1 1.3.75l-.564.977c-.61 1.058-.804 2.268-.542 3.41.255 1.12.919 2.04 1.87 2.59 1.984 1.143 4.61.313 5.86-1.85l4.195-7.25a.751.751 0 0 1 1.299.751l-4.195 7.25c-1.146 1.983-3.187 3.111-5.227 3.111" clip-rule="evenodd"></path></svg>職場不法侵害(含性騷擾、霸凌)防治、申訴及懲戒辦法20251203-公告版</a></p>→檔案位置:總翔企業>文件>General>總翔_SOP>職場不法侵害(含性騷擾、霸凌)防治、申訴及懲戒辦法20251203-公告版.pdf`
+      },
+      {
+      title: "請款單月底前送達總公司",
+      date: "公告日 2026/02/01",
+      body: `<p>提醒各位同仁：</p>
+      <ul>
+        <li>當月底前送達的請款資料，於<b>次月 15 號</b>付款。</li>
+        <li>需郵寄者請提前寄送，會依總公司實際收到日期登記。</li>
+        <li>資料或發票不完整、有問題，會影響付款時間。</li>
+      </ul>
+      <p>請款單須經主管簽核後，連同發票一起交回總公司（外縣市可郵寄）。</p>`
+    },
+    ];
+    function openModal(i) {
+      document.getElementById('mTitle').textContent = NEWS[i].title;
+      document.getElementById('mDate').textContent = NEWS[i].date;
+      document.getElementById('mBody').innerHTML = NEWS[i].body;
+      document.getElementById('mask').classList.add('show');
+    }
+    function closeModal() { document.getElementById('mask').classList.remove('show') }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal() });
+
+    /* ===== 據點資訊彈跳視窗 ===== */
+    const LOCS = [
+      { name: "台北分公司（三重）", tel: "02-2995-3899", addr: "新北市三重區中興里重新路5段609巷20號8樓之8" },
+      { name: "台中分公司", tel: "04-2254-2290", addr: "" },
+      { name: "高雄總公司", tel: "07-2270-096", addr: "高雄市苓雅區光華一路206號12樓之10" },
+    ];
+    function openLocModal(i) {
+      const l = LOCS[i];
+      document.getElementById('mTitle').textContent = l.name;
+      document.getElementById('mDate').textContent = '分公司資訊';
+      document.getElementById('mBody').innerHTML = `
+    <p>📞 電話：<a href="tel:${l.tel.replace(/[^0-9]/g, '')}">${l.tel}</a></p>
+    ${l.addr ? `<p>📍 地址：${l.addr}</p>` : ''}
+  `;
+      document.getElementById('mask').classList.add('show');
+    }
+
+    /* ===== 導覽列點擊：手動計算捲動位置（避免 scroll-margin-top 在部分瀏覽器失準）===== */
+    const subnavEl = document.querySelector('.subnav');
+    document.querySelectorAll('.subnav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        const navH = subnavEl.offsetHeight;
+        const y = target.getBoundingClientRect().top + window.scrollY - navH - 8;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        history.replaceState(null, '', link.getAttribute('href'));
+      });
+    });
+
+    /* ===== 進場淡入 ===== */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } })
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ===== 回到頂端按鈕顯示/隱藏 ===== */
+    const backTop = document.getElementById('backTop');
+    window.addEventListener('scroll', () => {
+      backTop.classList.toggle('show', window.scrollY > 400);
+    });
+
+    /* ===== 導覽列高亮目前區塊 ===== */
+    const navLinks = document.querySelectorAll('.subnav a');
+    const secObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = document.querySelector(`.subnav a[href="#${entry.target.id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    document.querySelectorAll('section[id]').forEach(sec => secObserver.observe(sec));
+
+    /* ===== 新人上手打卡：跨裝置記錄（Google 試算表 + Apps Script）===== */
+    const OB_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzHMfJ9lPErP7MNZD720VK-wQGXB8Id6t0c1mnY3-xSxaKr5eATrjldcj3KF55JrJRj/exec';
+    const OB_STORAGE_KEY = 'ob_user_id';
+    const obStatusEl = document.getElementById('obStatus');
+    const obCheckboxes = document.querySelectorAll('.ob-item input[data-ob-key]');
+
+    function obRenderStatus(userId, loading) {
+      if (!obStatusEl) return;
+      if (!userId) { obStatusEl.textContent = ''; return; }
+      const loadingTxt = loading ? '　<span style="opacity:.7">載入紀錄中…</span>' : '';
+      obStatusEl.innerHTML = `目前紀錄身份：<b>${userId.replace(/</g, '&lt;')}</b>　<span class="chg" id="obChangeUser">變更</span>${loadingTxt}`;
+      const changeLink = document.getElementById('obChangeUser');
+      if (changeLink) changeLink.addEventListener('click', obChangeUser);
+    }
+
+    function obGetUserId() {
+      return (localStorage.getItem(OB_STORAGE_KEY) || '').trim();
+    }
+
+    function obAskUserId() {
+      const id = prompt('請輸入您的姓名或 Email，以便記錄您的報到進度（下次會自動記得）：');
+      if (id && id.trim()) {
+        localStorage.setItem(OB_STORAGE_KEY, id.trim());
+        return id.trim();
+      }
+      return '';
+    }
+
+    function obChangeUser(e) {
+      e.preventDefault();
+      localStorage.removeItem(OB_STORAGE_KEY);
+      const id = obAskUserId();
+      obRenderStatus(id);
+      if (id) obLoadState(id);
+      else obCheckboxes.forEach(cb => cb.checked = false);
+    }
+
+    const OB_CACHE_KEY = 'ob_cache_data';
+
+    function obGetCache(userId) {
+      try {
+        const all = JSON.parse(localStorage.getItem(OB_CACHE_KEY) || '{}');
+        return all[userId] || null;
+      } catch (err) { return null; }
+    }
+
+    function obSetCache(userId, state) {
+      try {
+        const all = JSON.parse(localStorage.getItem(OB_CACHE_KEY) || '{}');
+        all[userId] = state;
+        localStorage.setItem(OB_CACHE_KEY, JSON.stringify(all));
+      } catch (err) { /* 儲存失敗就算了，不影響主要功能 */ }
+    }
+
+    function obApplyState(state) {
+      obCheckboxes.forEach(cb => {
+        const key = cb.getAttribute('data-ob-key');
+        cb.checked = !!state[key];
+      });
+    }
+
+    async function obLoadState(userId) {
+      if (!userId || !OB_WEBAPP_URL) return;
+      // 先用本機快取立刻顯示，不會有延遲感；沒有快取（這台裝置第一次用）才顯示載入中
+      const cached = obGetCache(userId);
+      if (cached) {
+        obApplyState(cached);
+      } else {
+        obCheckboxes.forEach(cb => cb.closest('.ob-item').classList.add('ob-loading'));
+        obRenderStatus(userId, true);
+      }
+      // 背景悄悄跟 Google 對最新資料，有差異就更新並存快取
+      try {
+        const res = await fetch(`${OB_WEBAPP_URL}?action=get&user=${encodeURIComponent(userId)}`);
+        const data = await res.json();
+        if (data && data.ok) {
+          obApplyState(data.state);
+          obSetCache(userId, data.state);
+        }
+      } catch (err) {
+        console.warn('無法載入打卡紀錄', err);
+      } finally {
+        obCheckboxes.forEach(cb => cb.closest('.ob-item').classList.remove('ob-loading'));
+        obRenderStatus(userId, false);
+      }
+    }
+
+    async function obSaveState(userId, key, checked) {
+      if (!userId || !OB_WEBAPP_URL) return;
+      // 立刻更新本機快取，下次重整馬上看得到
+      const cached = obGetCache(userId) || {};
+      cached[key] = checked;
+      obSetCache(userId, cached);
+      try {
+        await fetch(OB_WEBAPP_URL, {
+          method: 'POST',
+          body: JSON.stringify({ user: userId, key, checked })
+        });
+      } catch (err) {
+        console.warn('無法儲存打卡紀錄', err);
+      }
+    }
+
+    (function obInit() {
+      if (!obCheckboxes.length) return;
+      let userId = obGetUserId();
+      if (!userId) userId = obAskUserId();
+      obRenderStatus(userId);
+      if (userId) obLoadState(userId);
+
+      obCheckboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+          let uid = obGetUserId();
+          if (!uid) {
+            uid = obAskUserId();
+            obRenderStatus(uid);
+            if (!uid) { cb.checked = false; return; }
+          }
+          obSaveState(uid, cb.getAttribute('data-ob-key'), cb.checked);
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>
