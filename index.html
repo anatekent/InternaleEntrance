@@ -897,6 +897,189 @@
       .action-hub { grid-template-columns: 1fr }
       .action-feature { min-height: 235px; padding: 25px }
     }
+
+    /* ============ 請款時程：數字化提示條 ============ */
+    .notice {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 22px;
+      padding: 0;
+      overflow: hidden;
+      color: #fff;
+      background: #102F50;
+      border: 0;
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(13, 43, 75, .14);
+    }
+
+    .notice::before {
+      content: '15';
+      position: absolute;
+      right: 172px;
+      bottom: -53px;
+      color: rgba(255, 255, 255, .055);
+      font-size: 12rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .notice .tag {
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      padding: 20px 22px;
+      color: var(--ch-navy);
+      background: #91E7DC;
+      border-radius: 0;
+      font-size: .82rem;
+    }
+
+    .notice .big {
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .notice .big::before {
+      content: '月底前';
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      margin-right: 12px;
+      padding: 0 9px;
+      color: #A8F5EC;
+      background: rgba(0, 169, 165, .18);
+      border: 1px solid rgba(145, 231, 220, .24);
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .notice .gst {
+      position: relative;
+      align-self: center;
+      margin: 0 22px 0 0;
+      padding: 8px 0 8px 22px;
+      color: rgba(255, 255, 255, .68);
+      border-left: 1px solid rgba(255, 255, 255, .18);
+      font-size: .78rem;
+    }
+
+    .notice .gst b { color: #fff; font-size: .95rem }
+
+    /* ============ 新人上手：三步驟導覽 ============ */
+    .onboard {
+      position: relative;
+      padding: 27px 28px 23px;
+      overflow: hidden;
+      background: #FFFDF8;
+      border: 1px solid #F3E2B8;
+      border-radius: 18px;
+      box-shadow: 0 8px 22px rgba(154, 107, 16, .07);
+    }
+
+    .onboard::after {
+      content: '01';
+      position: absolute;
+      right: 17px;
+      top: -42px;
+      color: #FFF0CC;
+      font-size: 8rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .onboard h3 { position: relative; z-index: 1; margin-bottom: 7px; font-size: 1.06rem }
+    .onboard .ob-status { position: relative; z-index: 1 }
+
+    .onboard .ob-item {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      width: calc(33.333% - 10px);
+      min-height: 80px;
+      margin: 12px 10px 0 0;
+      padding: 13px 14px;
+      vertical-align: top;
+      align-items: flex-start;
+      gap: 9px;
+      color: #765618;
+      background: #fff;
+      border: 1px solid #F1E4C5;
+      border-radius: 10px;
+      font-size: .86rem;
+      line-height: 1.55;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .onboard .ob-item:nth-of-type(4) { margin-right: 0 }
+    .onboard .ob-item:hover { transform: translateY(-3px); box-shadow: 0 7px 15px rgba(154, 107, 16, .12) }
+    .onboard .ob-item input { flex: 0 0 auto; margin-top: 3px }
+
+    @media(max-width:700px) {
+      .notice { grid-template-columns: 1fr; gap: 0 }
+      .notice .tag { padding: 10px 18px }
+      .notice .big { padding: 17px 18px 7px }
+      .notice .gst { margin: 0; padding: 7px 18px 18px; border: 0 }
+      .notice::before { right: 0; bottom: -68px }
+      .onboard .ob-item { display: flex; width: 100%; margin-right: 0; min-height: auto }
+    }
+
+    /* ============ 藍色系視覺變化 ============ */
+    body { background: #F1F7FD; }
+    .hero { background: linear-gradient(120deg, #06264A 0%, #0E4D87 54%, #1576B8 100%); }
+
+    #sec-news .card {
+      border: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 13px 30px rgba(13, 43, 75, .09);
+    }
+
+    .news-item { position: relative; padding: 17px 22px; }
+    .news-item::after {
+      content: '↗';
+      margin-left: 4px;
+      color: #9CB2C8;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity .2s, transform .2s;
+    }
+    .news-item .dot { width: 10px; height: 10px; background: #347FC4; box-shadow: 0 0 0 4px #E5F1FB; }
+    .news-item:hover { padding-left: 28px; background: linear-gradient(90deg, #EAF5FF, #fff); }
+    .news-item:hover::after { opacity: 1; transform: translateX(0); }
+
+    /* 新人區：冰藍步驟卡 */
+    .onboard { background: linear-gradient(135deg, #EDF7FF, #F9FCFF); border-color: #CDE3F4; }
+    .onboard::after { color: #D9EEFC; }
+    .onboard h3, .ob-status { color: #12558E !important; }
+    .onboard .ob-item { color: #24587F; border-color: #D6E8F6; box-shadow: 0 3px 10px rgba(20, 99, 159, .04); }
+    .onboard .ob-item:hover { box-shadow: 0 9px 18px rgba(20, 99, 159, .14); }
+    .onboard .ob-item a { color: #1672B8; }
+
+    /* 部門與知識庫：雙色標題列 */
+    #sec-dept .card { overflow: hidden; border: 0; border-radius: 16px; box-shadow: 0 9px 22px rgba(13, 43, 75, .08); }
+    #sec-dept .card-head { padding: 17px 20px; color: #fff; background: linear-gradient(90deg, #0B3C6B, #176EAE); border: 0; }
+    #sec-dept .card:nth-child(2) .card-head { background: linear-gradient(90deg, #11648F, #13A1B5); }
+    #sec-dept .link-list a { position: relative; padding: 14px 20px 14px 28px; }
+    #sec-dept .link-list a::before { content: ''; position: absolute; left: 18px; width: 4px; height: 4px; border-radius: 50%; background: #50A8E6; }
+    #sec-dept .link-list a:hover { padding-left: 31px; color: #0D609E; background: #EDF7FF; }
+
+    /* FAQ：左側藍色標記與展開底色 */
+    #sec-faq .card { border: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 9px 22px rgba(13, 43, 75, .08); }
+    .faq-q { border-left: 4px solid transparent; }
+    .faq-q:hover, .faq-q.open { border-left-color: #1D83C7; background: #F0F8FE; }
+    .faq-q .q::before { background: #176EAE; border-radius: 50%; }
+    .faq-q.open .q { color: #0B5F9D; }
+
+    /* 據點：地區標籤在藍色底上浮動 */
+    #sec-loc .loc-block { padding: 13px 15px; background: rgba(255, 255, 255, .66); border-left: 3px solid #B6DCF4; border-radius: 0 11px 11px 0; }
+    #sec-loc .loc-block:hover { border-left-color: #1475B8; background: #fff; }
+    #sec-loc .pill { border-color: #C6DEEF; color: #15517F; }
+    #sec-loc .pill:hover { background: #176EAE; border-color: #176EAE; }
   </style>
 </head>
 
