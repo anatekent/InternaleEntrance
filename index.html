@@ -747,6 +747,51 @@
     }
 
     /* ============ 新人打卡狀態列 ============ */
+    .ob-identity {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, .65);
+      border: 1px dashed #D8C58D;
+      border-radius: 9px;
+    }
+
+    .ob-identity label {
+      color: #8A6414;
+      font-size: .82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ob-identity input {
+      flex: 1;
+      min-width: 0;
+      padding: 7px 9px;
+      color: var(--ch-navy);
+      background: #fff;
+      border: 1px solid #E3D1A1;
+      border-radius: 6px;
+      font: inherit;
+      font-size: .84rem;
+      outline: none;
+    }
+
+    .ob-identity input:focus { border-color: var(--ch-teal); box-shadow: 0 0 0 3px rgba(0, 169, 165, .13); }
+    .ob-identity button {
+      padding: 7px 12px;
+      color: #fff;
+      background: var(--ch-teal-dark);
+      border: 0;
+      border-radius: 6px;
+      font: inherit;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .ob-identity button:hover { background: var(--ch-navy); }
+
     .ob-status {
       font-size: .8rem;
       color: #9A6B10;
@@ -994,6 +1039,11 @@
     <div class="wrap reveal">
       <div class="onboard">
         <h3>🌱 新人上手：報到第一週</h3>
+        <div class="ob-identity">
+          <label for="obUserId">姓名或 Email</label>
+          <input id="obUserId" type="text" placeholder="選填；填寫後才會記錄進度" autocomplete="name">
+          <button type="button" id="obSaveUser">開始記錄</button>
+        </div>
         <div class="ob-status" id="obStatus"></div>
         <!-- <div class="ob-item"><input type="checkbox"><span>看 3 分鐘公司簡介影片</span></div> -->
         <div class="ob-item"><input type="checkbox" data-ob-key="download_form_sop"><span>下載
@@ -1298,12 +1348,17 @@
     const OB_STORAGE_KEY = 'ob_user_id';
     const obStatusEl = document.getElementById('obStatus');
     const obCheckboxes = document.querySelectorAll('.ob-item input[data-ob-key]');
+    const obUserInput = document.getElementById('obUserId');
+    const obSaveUserBtn = document.getElementById('obSaveUser');
 
     function obRenderStatus(userId, loading) {
       if (!obStatusEl) return;
-      if (!userId) { obStatusEl.textContent = ''; return; }
+      if (!userId) {
+        obStatusEl.textContent = '尚未啟用進度記錄；可直接勾選清單，但不會儲存。';
+        return;
+      }
       const loadingTxt = loading ? '　<span style="opacity:.7">載入紀錄中…</span>' : '';
-      obStatusEl.innerHTML = `目前紀錄身份：<b>${userId.replace(/</g, '&lt;')}</b>　<span class="chg" id="obChangeUser">變更</span>${loadingTxt}`;
+      obStatusEl.innerHTML = `目前記錄身份：<b>${userId.replace(/</g, '&lt;')}</b>　<span class="chg" id="obChangeUser">停止記錄</span>${loadingTxt}`;
       const changeLink = document.getElementById('obChangeUser');
       if (changeLink) changeLink.addEventListener('click', obChangeUser);
     }
@@ -1312,22 +1367,24 @@
       return (localStorage.getItem(OB_STORAGE_KEY) || '').trim();
     }
 
-    function obAskUserId() {
-      const id = prompt('請輸入您的姓名或 Email，以便記錄您的報到進度（下次會自動記得）：');
-      if (id && id.trim()) {
-        localStorage.setItem(OB_STORAGE_KEY, id.trim());
-        return id.trim();
-      }
-      return '';
-    }
-
     function obChangeUser(e) {
       e.preventDefault();
       localStorage.removeItem(OB_STORAGE_KEY);
-      const id = obAskUserId();
-      obRenderStatus(id);
-      if (id) obLoadState(id);
-      else obCheckboxes.forEach(cb => cb.checked = false);
+      if (obUserInput) obUserInput.value = '';
+      obCheckboxes.forEach(cb => cb.checked = false);
+      obRenderStatus('');
+    }
+
+    function obEnableRecording() {
+      const id = (obUserInput?.value || '').trim();
+      if (!id) {
+        obRenderStatus('');
+        if (obUserInput) obUserInput.focus();
+        return;
+      }
+      localStorage.setItem(OB_STORAGE_KEY, id);
+      obRenderStatus(id, true);
+      obLoadState(id);
     }
 
     const OB_CACHE_KEY = 'ob_cache_data';
@@ -1398,19 +1455,20 @@
 
     (function obInit() {
       if (!obCheckboxes.length) return;
-      let userId = obGetUserId();
-      if (!userId) userId = obAskUserId();
+      const userId = obGetUserId();
+      if (obUserInput) obUserInput.value = userId;
       obRenderStatus(userId);
       if (userId) obLoadState(userId);
 
+      if (obSaveUserBtn) obSaveUserBtn.addEventListener('click', obEnableRecording);
+      if (obUserInput) obUserInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') obEnableRecording();
+      });
+
       obCheckboxes.forEach(cb => {
         cb.addEventListener('change', () => {
-          let uid = obGetUserId();
-          if (!uid) {
-            uid = obAskUserId();
-            obRenderStatus(uid);
-            if (!uid) { cb.checked = false; return; }
-          }
+          const uid = obGetUserId();
+          if (!uid) return;
           obSaveState(uid, cb.getAttribute('data-ob-key'), cb.checked);
         });
       });
