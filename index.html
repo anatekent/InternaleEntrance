@@ -1080,6 +1080,41 @@
     #sec-loc .loc-block:hover { border-left-color: #1475B8; background: #fff; }
     #sec-loc .pill { border-color: #C6DEEF; color: #15517F; }
     #sec-loc .pill:hover { background: #176EAE; border-color: #176EAE; }
+
+    /* ============ 快速指令搜尋 ============ */
+    .command-trigger {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: min(100%, 410px);
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, .86);
+      background: rgba(255, 255, 255, .11);
+      border: 1px solid rgba(255, 255, 255, .26);
+      border-radius: 11px;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .command-trigger:hover { background: rgba(255, 255, 255, .19); transform: translateY(-1px); }
+    .command-trigger kbd { margin-left: auto; padding: 1px 6px; color: rgba(255, 255, 255, .76); background: rgba(0, 0, 0, .18); border-radius: 4px; font: 700 .7rem var(--font-main); }
+    .command-mask { position: fixed; inset: 0; z-index: 200; display: none; padding: 12vh 20px 20px; background: rgba(4, 24, 45, .58); backdrop-filter: blur(7px); }
+    .command-mask.show { display: block; animation: maskIn .2s ease; }
+    .command-panel { max-width: 620px; margin: 0 auto; overflow: hidden; background: #fff; border: 1px solid rgba(255, 255, 255, .5); border-radius: 18px; box-shadow: 0 24px 70px rgba(0, 26, 53, .35); }
+    .command-search { display: flex; align-items: center; gap: 12px; padding: 17px 19px; border-bottom: 1px solid #DFEAF3; }
+    .command-search svg { color: #196FAD; flex: 0 0 auto; }
+    .command-search input { width: 100%; border: 0; outline: 0; color: var(--ch-navy); font: 600 1rem var(--font-main); }
+    .command-search input::placeholder { color: #92A6B8; font-weight: 400; }
+    .command-results { max-height: 360px; padding: 8px; overflow: auto; }
+    .command-label { padding: 8px 10px 5px; color: #6D8499; font-size: .72rem; font-weight: 800; letter-spacing: .08em; }
+    .command-result { display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 12px; color: var(--ch-navy); background: transparent; border: 0; border-radius: 10px; font: inherit; text-align: left; cursor: pointer; }
+    .command-result:hover { background: #EAF5FD; }
+    .command-result .cr-icon { display: grid; width: 32px; height: 32px; place-items: center; color: #176EAE; background: #DDEFFC; border-radius: 8px; font-weight: 800; }
+    .command-result small { display: block; margin-top: 1px; color: #72879A; font-size: .75rem; }
+    .command-result .cr-arrow { margin-left: auto; color: #8CA5B8; }
+    .command-empty { padding: 28px 12px; color: #7890A3; text-align: center; font-size: .9rem; }
+    .command-foot { padding: 10px 18px; color: #7590A4; background: #F7FAFD; border-top: 1px solid #E2ECF4; font-size: .74rem; }
   </style>
 </head>
 
@@ -1099,6 +1134,11 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
         問 Copilot
       </a> -->
+        <button class="command-trigger" type="button" onclick="openCommand()" aria-label="開啟快速搜尋">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          搜尋表單、系統或功能
+          <kbd>Ctrl K</kbd>
+        </button>
       </div>
     </div>
   </header>
@@ -1326,6 +1366,18 @@
     </svg>
   </button>
 
+  <!-- ========== 快速指令搜尋 ========== -->
+  <div class="command-mask" id="commandMask" onclick="if(event.target===this)closeCommand()">
+    <div class="command-panel" role="dialog" aria-modal="true" aria-label="快速搜尋">
+      <div class="command-search">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="commandInput" type="search" placeholder="輸入「請款」、「出勤」、「人資」…" autocomplete="off">
+      </div>
+      <div class="command-results" id="commandResults"></div>
+      <div class="command-foot">輸入關鍵字立即篩選　·　按 Esc 關閉</div>
+    </div>
+  </div>
+
   <!-- ========== 彈跳視窗 ========== -->
   <div class="modal-mask" id="mask" onclick="if(event.target===this)closeModal()">
     <div class="modal">
@@ -1339,6 +1391,61 @@
   </div>
 
   <script>
+    /* ===== 快速指令搜尋：集中常用入口與最近使用紀錄 ===== */
+    const COMMAND_ACTIONS = [
+      { name: '104 企業大師', hint: '考勤打卡系統', icon: '◷', url: 'https://pro.104.com.tw/psc2', external: true },
+      { name: '國內請款單', hint: '下載請款表單', icon: '▤', url: 'https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/1_%E5%9C%8B%E5%85%A7%E8%AB%8B%E6%AC%BE%E5%96%AE.xlsx', external: true },
+      { name: '出勤表', hint: '下載出勤紀錄表', icon: '✓', url: 'https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/2_%E5%87%BA%E5%8B%A4%E8%A1%A8.xlsx', external: true },
+      { name: '里程紀錄表', hint: '公務車／私車', icon: '⌁', url: 'https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/3_%E5%85%AC%E5%8B%99%E8%BB%8A%E7%A7%81%E8%BB%8A%E9%87%8C%E7%A8%8B%E7%B4%80%E9%8C%84%E8%A1%A8.xlsx', external: true },
+      { name: '國外請款單', hint: '下載請款表單', icon: '◎', url: 'https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/4_%E5%9C%8B%E5%A4%96%E8%AB%8B%E6%AC%BE%E5%96%AE.xlsx', external: true },
+      { name: '國外出差津貼', hint: '下載申請表', icon: '↗', url: 'https://onanatek.sharepoint.com/sites/PowerAutomate/Shared%20Documents/%E5%90%84%E9%A1%9E%E5%A0%B1%E8%AB%8B%E6%AC%BE%E8%A1%A8%E5%96%AE/5_%E5%9C%8B%E5%A4%96%E5%87%BA%E5%B7%AE%E6%B4%A5%E8%B2%BC%E7%94%B3%E8%AB%8B%E8%A1%A8.xlsx', external: true },
+      { name: '新人上手', hint: '查看報到第一週清單', icon: '01', url: '#sec-onboard' },
+      { name: '各部門 SharePoint', hint: '人資、管理、研發、業務等', icon: '⌘', url: '#sec-dept' },
+      { name: '常見問題', hint: '請款、停車與補助說明', icon: '?', url: '#sec-faq' },
+      { name: '各區據點', hint: '台灣、海外聯絡資訊', icon: '⌖', url: '#sec-loc' }
+    ];
+    const COMMAND_RECENT_KEY = 'portal_command_recent';
+    const commandMask = document.getElementById('commandMask');
+    const commandInput = document.getElementById('commandInput');
+    const commandResults = document.getElementById('commandResults');
+
+    function getCommandRecent() {
+      try { return JSON.parse(localStorage.getItem(COMMAND_RECENT_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+    function setCommandRecent(name) {
+      const next = [name, ...getCommandRecent().filter(n => n !== name)].slice(0, 4);
+      localStorage.setItem(COMMAND_RECENT_KEY, JSON.stringify(next));
+    }
+    function renderCommand(query = '') {
+      const keyword = query.trim().toLowerCase();
+      let items = keyword ? COMMAND_ACTIONS.filter(a => `${a.name} ${a.hint}`.toLowerCase().includes(keyword)) : getCommandRecent().map(n => COMMAND_ACTIONS.find(a => a.name === n)).filter(Boolean);
+      const label = keyword ? '搜尋結果' : (items.length ? '最近使用' : '常用功能');
+      if (!items.length && !keyword) items = COMMAND_ACTIONS.slice(0, 6);
+      commandResults.innerHTML = `<div class="command-label">${label}</div>` + (items.length ? items.map(a => `<button class="command-result" type="button" data-command="${a.name}"><span class="cr-icon">${a.icon}</span><span><b>${a.name}</b><small>${a.hint}</small></span><span class="cr-arrow">→</span></button>`).join('') : '<div class="command-empty">找不到相符的功能，試試「請款」或「出勤」。</div>');
+      commandResults.querySelectorAll('[data-command]').forEach(btn => btn.addEventListener('click', () => runCommand(btn.dataset.command)));
+    }
+    function openCommand() {
+      commandMask.classList.add('show');
+      commandInput.value = '';
+      renderCommand();
+      setTimeout(() => commandInput.focus(), 50);
+    }
+    function closeCommand() { commandMask.classList.remove('show'); }
+    function runCommand(name) {
+      const action = COMMAND_ACTIONS.find(a => a.name === name);
+      if (!action) return;
+      setCommandRecent(action.name);
+      closeCommand();
+      if (action.url.startsWith('#')) document.querySelector(action.url)?.scrollIntoView({ behavior: 'smooth' });
+      else window.open(action.url, action.external ? '_blank' : '_self');
+    }
+    commandInput.addEventListener('input', e => renderCommand(e.target.value));
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCommand(); }
+      if (e.key === 'Escape') closeCommand();
+    });
+
     /* ===== 範例公告內容（之後自行修改此陣列即可） ===== */
     const NEWS = [
       {
